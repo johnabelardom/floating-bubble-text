@@ -1,4 +1,6 @@
 <?php 
+  // var_dump( $fbt_vars );
+  // var_dump( $fbt_content );
 
   if ( ! $fbt_vars ) {
     echo "Provided ID doesn't exists.";
