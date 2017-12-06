@@ -1,6 +1,4 @@
 <?php 
-  // var_dump( $fbt_vars );
-  // var_dump( $fbt_content );
 
   if ( ! $fbt_vars ) {
     echo "Provided ID doesn't exists.";
@@ -9,17 +7,15 @@
     $fbt_vars = $fbt_vars[0];
 
 ?>
-<div id="floating-bubble-text" style="">
+<div id="floating-bubble-text" style="max-width: 100%;">
   <div id="fbt-tooltip" class="">
     <div id="fbt-content" data-seconds="<?= $fbt_seconds ?>">
     <?php 
       $x = 1;
       foreach ($fbt_content as $key => $post) {
-        // var_dump($post);
     ?>
       <div class="linkSlides" data-link-slide="<?= $x++ ?>" style="opacity: 0; display: none;">
         <a href="<?= $post->guid ?>" target="_blank"><?= $post->post_title ?></a>
-        <!-- <small><?= $post->post_excerpt ?></small> -->
       </div>
     <?php 
       }
