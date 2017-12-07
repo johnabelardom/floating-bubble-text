@@ -2,7 +2,7 @@
    /*
    Plugin Name: Floating Bubble Text
    Description: Floating bubble text anywhere using shortcode
-   Version: 0.0.3
+   Version: 1.0.2
    License: GPL2
    */
 

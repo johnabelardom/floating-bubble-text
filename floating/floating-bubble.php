@@ -65,7 +65,7 @@
 
 <style>
 
-#fbt-tooltip {
+/*#fbt-tooltip {
     max-width: 100%;
     position: relative;
     padding: 50px 30px;
@@ -112,17 +112,41 @@
     -moz-border-radius: 25px;
     border-radius: 25px;
     display: block;
-}
+}*/
 
 
 #fbt-tooltip, .linkSlides, #floating-bubble-text, #fbt-image {
   transition-property: all;
   transition-timing-function: ease-in-out;
-  transition-duration: 1s
+  transition-duration: 0.5s
 }
 
 #fbt-image img {
   max-width: 50%;
+}
+
+#fbt-tooltip {
+  position: relative;
+  background: #eee;
+  border-radius: .4em;
+  padding: 30px;
+  max-width: 100%;
+  max-height: 100%;
+  text-align: center;
+}
+
+#fbt-tooltip:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 28px solid transparent;
+  border-top-color: #eee;
+  border-bottom: 0;
+  margin-left: -14px;
+  margin-bottom: -28px;
 }
 </style>
 
