@@ -59,7 +59,54 @@
     secs = jQuery('#fbt-content').attr('data-seconds');
     // setInterval(showDivs(1), 1);
     setInterval(function(){ plusDivs(1) }, secs);
+    followRightCenter();
   })
+
+  jQuery(window).on('resize', function() {
+    followRightCenter();
+  });
+
+  function followTopLeft() {
+    var imgPos = jQuery('#fbt-image').position();
+    var tooltip = document.getElementById('fbt-tooltip');
+    var x = imgPos.left + 25;
+    var y = imgPos.top - 50;
+    tooltip.style.position = "absolute";
+    tooltip.style.left = x +'px';
+    tooltip.style.top = y +'px';
+  }
+
+  function followTopRight() {
+    var imgPos = jQuery('#fbt-image').position();
+    var d = document.getElementById('fbt-tooltip');
+    var x = imgPos.left + (imgPos.left / 2);
+    var y = imgPos.top - 50;
+    d.style.position = "absolute";
+    d.style.left = x + 'px';
+    d.style.top = y + 'px';
+  }
+  function followRightCenter() {
+    var imgPos = jQuery('#fbt-image').position();
+    var img = jQuery('#fbt-image');
+    var tooltip = document.getElementById('fbt-tooltip');
+    var x = imgPos.left + 25;
+    var y = imgPos.top + ((img.height() / 2 + 1) - (tooltip.offsetHeight *2));
+    console.log(x, y)
+    tooltip.style.position = "absolute";
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+  }
+  function followLeftCenter() {
+    var imgPos = jQuery('#fbt-image').position();
+    var img = jQuery('#fbt-image');
+    var tooltip = document.getElementById('fbt-tooltip');
+    var x = imgPos.left + (imgPos.left / 2);
+    var y = imgPos.top + ((img.height() / 2 + 1) - (tooltip.offsetHeight *2));
+    tooltip.style.position = "absolute";
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+  }
+
 
 </script>
 
@@ -127,7 +174,7 @@
 
 #fbt-tooltip {
   position: relative;
-  background: #eee;
+  background: #999;
   border-radius: .4em;
   padding: 30px;
   max-width: 100%;
