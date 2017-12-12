@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div id="fbt-image" style="text-align: center;">
+  <div id="fbt-image" style="text-align: <?= $picture_align ?>;">
     <img src="<?= $fbt_vars->picture_link ?>" >
   </div>
 </div>
@@ -40,14 +40,16 @@
   var data_pos;
   var element = jQuery("#fbt-tooltip");
   var newWidth = element.css('width').replace('px', '');
+  var newHeight = element.css('height').replace('px', '');
 
   function checkForChanges() {
-      // if (element.css('width') != lastWidth) {
-      // }
       w = element.css('width').replace('px', '');
-      // return w;
       newWidth = w;
+      h = element.css('height').replace('px', '');
+      newHeight = h;
+
       console.log("New Width", newWidth);
+      console.log("New Height", newHeight);
   }
 
   function plusDivs(n) {
@@ -140,35 +142,33 @@
     tooltip.style.top = y + 'px';
   }
   function followRightCenter() {
-    var imgPos = jQuery('#fbt-image').position();
-    var img = jQuery('#fbt-image');
+    var imgPos = jQuery('#fbt-image img').position();
+    var img = jQuery('#fbt-image img');
     var tooltip = document.getElementById('fbt-tooltip');
-    var x = (imgPos.left + (img.width() /2)) + (newWidth / 2);
-    var y = imgPos.top + ((img.height() / 2 + 1) - (tooltip.offsetHeight *2));
+    var x = (imgPos.left + img.width());
+    var y = imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2));
 
-    if (last_y == 0)
-      last_y = y;
-    else
-      y = last_y;
+    // if (last_y == 0)
+    //   last_y = y;
+    // else
+    //   y = last_y;
 
-    console.log(x, y)
     tooltip.style.position = "absolute";
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
-    console.log("Last y", last_y);
-    console.log("Y", y);
   }
   function followLeftCenter() {
-    var imgPos = jQuery('#fbt-image').position();
-    var img = jQuery('#fbt-image');
+    var imgPos = jQuery('#fbt-image img').position();
+    var img = jQuery('#fbt-image img');
     var tooltip = document.getElementById('fbt-tooltip');
-    var x = imgPos.left - (newWidth / 2);
-    var y = imgPos.top + ((img.height() / 2 + 1) - (tooltip.offsetHeight *2));
+    var x = imgPos.left - (newWidth);
+    var y = imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2));
 
-    if (last_y == 0)
-      last_y = y;
-    else
-      y = last_y;
+    // if (last_y == 0) {
+    //   last_y = y;
+    // } else {
+    //   y = last_y;
+    // }
 
     tooltip.style.position = "absolute";
     tooltip.style.left = x + 'px';

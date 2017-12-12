@@ -2,7 +2,7 @@
    /*
    Plugin Name: Floating Bubble Text
    Description: Floating bubble text anywhere using shortcode
-   Version: 1.0.2
+   Version: 1.0.4
    License: GPL2
    */
 
@@ -88,8 +88,9 @@ class Floating_Bubble_Text {
 	        'category' => '',
 	        'post_type' => 'post',
 	        'seconds' => '3000',
-	        'bubble_position' => 'left',
-	        'bubble_color' => '#ddd'
+	        'bubble_position' => 'center',
+	        'bubble_color' => '#ddd',
+	        'picture_align' => 'center'
 	    ), $atts, 'fbt' ) );
 	    // exit($bubble_position);
 	    // begin output buffering
