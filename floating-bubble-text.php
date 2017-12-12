@@ -87,14 +87,16 @@ class Floating_Bubble_Text {
 	        'limit' => '3',
 	        'category' => '',
 	        'post_type' => 'post',
-	        'seconds' => '3000'
+	        'seconds' => '3000',
+	        'bubble_position' => 'left',
+	        'bubble_color' => '#ddd'
 	    ), $atts, 'fbt' ) );
-	    
+	    // exit($bubble_position);
 	    // begin output buffering
 	    ob_start();
 
 	    $fbt_vars = $fbt_id != '' ? $this->get_record_by_id( $fbt_id ) : null;
-	    $fbt_content = $this->get_latest_posts( $limit );
+	    $fbt_content = $this->get_latest_posts( $limit, $category, $post_type );
 
 
 		include( plugin_dir_path( __FILE__ ) . 'floating/floating-bubble.php');
@@ -128,7 +130,7 @@ class Floating_Bubble_Text {
 	    if ( $category != "" ) {
 			$pageposts = new WP_Query( array( 'category_name' => $category, 'posts_per_page' => $limit, 'post_status' => 'publish' ) );
 			$pageposts = $pageposts->posts;
-	    } 
+	    }
 		return $pageposts;
 	}
 

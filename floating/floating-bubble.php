@@ -1,6 +1,7 @@
 <?php 
   // var_dump( $fbt_vars );
   // var_dump( $fbt_content );
+  // exit(var_dump($bubble_position));
 
   if ( ! $fbt_vars ) {
     echo "Provided ID doesn't exists.";
@@ -9,8 +10,8 @@
     $fbt_vars = $fbt_vars[0];
 
 ?>
-<div id="floating-bubble-text" style="max-width: 100%;">
-  <div id="fbt-tooltip" class="">
+<div id="floating-bubble-text" class="" style="max-width: 100%;">
+  <div id="fbt-tooltip" data-position-bubble="<?= $bubble_position ?>" class="">
     <div id="fbt-content" data-seconds="<?= $fbt_seconds ?>">
     <?php 
       $x = 1;
@@ -35,6 +36,19 @@
   var tooltip = jQuery('#fbt-tooltip .arrow');
   var charPosition = char.position();
   var slideIndex = 1;
+  var last_y = 0;
+  var data_pos;
+  var element = jQuery("#fbt-tooltip");
+  var newWidth = element.css('width').replace('px', '');
+
+  function checkForChanges() {
+      // if (element.css('width') != lastWidth) {
+      // }
+      w = element.css('width').replace('px', '');
+      // return w;
+      newWidth = w;
+      console.log("New Width", newWidth);
+  }
 
   function plusDivs(n) {
     showDivs(slideIndex += n);
@@ -55,15 +69,44 @@
   }
 
   jQuery(document).ready(function() {
-    jQuery('[data-link-slide=1]').attr('style', '');
-    secs = jQuery('#fbt-content').attr('data-seconds');
-    // setInterval(showDivs(1), 1);
-    setInterval(function(){ plusDivs(1) }, secs);
-    followRightCenter();
+    // setTimeout(function() {
+      data_pos = jQuery('#fbt-tooltip').attr('data-position-bubble');
+      console.log(data_pos);
+      jQuery('#fbt-tooltip').addClass(data_pos + '-tooltip');
+
+      jQuery('[data-link-slide=1]').attr('style', '');
+      secs = jQuery('#fbt-content').attr('data-seconds');
+      // setInterval(showDivs(1), 1);
+      setInterval(function() { plusDivs(1) }, secs);
+      // setInterval(function() { checkForChanges(); followLeftCenter(); }, secs / 2);
+      if (data_pos == 'left') {
+        followLeftCenter();
+        setInterval(function() { checkForChanges(); followLeftCenter(); }, secs / 2);
+      }
+      if (data_pos == 'right') {
+        followRightCenter();
+        setInterval(function() { checkForChanges(); followRightCenter(); }, secs / 2);
+      }
+      if (data_pos == 'topLeft') {
+        followTopLeft();
+        setInterval(function() { checkForChanges(); followTopLeft(); }, secs / 2);
+      }
+      if (data_pos == 'TopRight') {
+        followTopRight();
+        setInterval(function() { checkForChanges(); followTopRight(); }, secs / 2);
+      }
+    // }, 3000)
   })
 
   jQuery(window).on('resize', function() {
-    followRightCenter();
+    if (data_pos == 'left')
+      followLeftCenter();
+    if (data_pos == 'right')
+      followRightCenter();
+    if (data_pos == 'top-left')
+      followTopLeft();
+    if (data_pos == 'Top-right')
+      followTopRight();
   });
 
   function followTopLeft() {
@@ -71,42 +114,66 @@
     var tooltip = document.getElementById('fbt-tooltip');
     var x = imgPos.left + 25;
     var y = imgPos.top - 50;
+
+    if (last_y == 0)
+      last_y = y;
+    else
+      y = last_y;
+
     tooltip.style.position = "absolute";
     tooltip.style.left = x +'px';
     tooltip.style.top = y +'px';
   }
-
   function followTopRight() {
     var imgPos = jQuery('#fbt-image').position();
-    var d = document.getElementById('fbt-tooltip');
+    var tooltip = document.getElementById('fbt-tooltip');
     var x = imgPos.left + (imgPos.left / 2);
     var y = imgPos.top - 50;
-    d.style.position = "absolute";
-    d.style.left = x + 'px';
-    d.style.top = y + 'px';
+
+    if (last_y == 0)
+      last_y = y;
+    else
+      y = last_y;
+
+    tooltip.style.position = "absolute";
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
   }
   function followRightCenter() {
     var imgPos = jQuery('#fbt-image').position();
     var img = jQuery('#fbt-image');
     var tooltip = document.getElementById('fbt-tooltip');
-    var x = imgPos.left + 25;
+    var x = (imgPos.left + (img.width() /2)) + (newWidth / 2);
     var y = imgPos.top + ((img.height() / 2 + 1) - (tooltip.offsetHeight *2));
+
+    if (last_y == 0)
+      last_y = y;
+    else
+      y = last_y;
+
     console.log(x, y)
     tooltip.style.position = "absolute";
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
+    console.log("Last y", last_y);
+    console.log("Y", y);
   }
   function followLeftCenter() {
     var imgPos = jQuery('#fbt-image').position();
     var img = jQuery('#fbt-image');
     var tooltip = document.getElementById('fbt-tooltip');
-    var x = imgPos.left + (imgPos.left / 2);
+    var x = imgPos.left - (newWidth / 2);
     var y = imgPos.top + ((img.height() / 2 + 1) - (tooltip.offsetHeight *2));
+
+    if (last_y == 0)
+      last_y = y;
+    else
+      y = last_y;
+
     tooltip.style.position = "absolute";
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
   }
-
 
 </script>
 
@@ -174,10 +241,11 @@
 
 #fbt-tooltip {
   position: relative;
-  background: #999;
+  background: #ddd;
   border-radius: .4em;
   padding: 30px;
   max-width: 100%;
+  /*width: 20%;*/
   max-height: 100%;
   text-align: center;
 }
@@ -185,16 +253,51 @@
 #fbt-tooltip:after {
   content: '';
   position: absolute;
+}
+
+.top-tooltip:after {
   bottom: 0;
   left: 50%;
   width: 0;
   height: 0;
   border: 28px solid transparent;
-  border-top-color: #eee;
+  border-top-color: <?= $bubble_color ?>;
   border-bottom: 0;
-  margin-left: -14px;
+  margin-left: -28px;
   margin-bottom: -28px;
 }
+
+.top-right-tooltip:after {
+
+}
+.top-left-tooltip:after {
+
+}
+
+.right-tooltip:after {
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 28px solid transparent;
+  border-right-color: <?= $bubble_color ?>;
+  border-left: 0;
+  margin-top: -28px;
+  margin-left: -28px;
+}
+.left-tooltip:after {
+  right: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 28px solid transparent;
+  border-left-color: <?= $bubble_color ?>;
+  border-right: 0;
+  margin-top: -28px;
+  margin-right: -28px;
+}
+
+
 </style>
 
 <?php 
