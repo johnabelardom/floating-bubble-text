@@ -10,8 +10,11 @@
     $fbt_vars = $fbt_vars[0];
 
 ?>
-<div id="floating-bubble-text" class="" style="max-width: 100%;">
-  <div id="fbt-tooltip" data-position-bubble="<?= $bubble_position ?>" class="">
+<div class="bubble right">
+  This is a blockquote that is styled to look like a speech bubble
+</div>
+<div id="floating-bubble-text" class="" style="max-width: 100%; position: fixed; bottom: 0; right: 0;">
+  <div id="fbt-tooltip" data-position-bubble="<?= $bubble_position ?>" class="<?= $bubble_position != 'top' ? "bubble" : "" ?>">
     <div id="fbt-content" data-seconds="<?= $fbt_seconds ?>">
     <?php 
       $x = 1;
@@ -33,7 +36,7 @@
 
 <script>
   var char = jQuery('#fbt-image img');
-  var tooltip = jQuery('#fbt-tooltip .arrow');
+  var tooltip = jQuery('#fbt-tooltip');
   var charPosition = char.position();
   var slideIndex = 1;
   var last_y = 0;
@@ -74,7 +77,7 @@
     // setTimeout(function() {
       data_pos = jQuery('#fbt-tooltip').attr('data-position-bubble');
       console.log(data_pos);
-      jQuery('#fbt-tooltip').addClass(data_pos + '-tooltip');
+      jQuery('#fbt-tooltip').addClass(data_pos == 'right' ? 'left' : 'right');
 
       jQuery('[data-link-slide=1]').attr('style', '');
       secs = jQuery('#fbt-content').attr('data-seconds');
@@ -145,8 +148,8 @@
     var imgPos = jQuery('#fbt-image img').position();
     var img = jQuery('#fbt-image img');
     var tooltip = document.getElementById('fbt-tooltip');
-    var x = (imgPos.left + img.width());
-    var y = imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2));
+    var x = (imgPos.left + img.width()) - (newWidth * .1);
+    var y = (imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2))) - (newHeight * .8);
 
     // if (last_y == 0)
     //   last_y = y;
@@ -162,7 +165,8 @@
     var img = jQuery('#fbt-image img');
     var tooltip = document.getElementById('fbt-tooltip');
     var x = imgPos.left - (newWidth);
-    var y = imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2));
+    // console.log(imgPos.left);
+    var y = (imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2))) - (newHeight * .8);
 
     // if (last_y == 0) {
     //   last_y = y;
@@ -232,7 +236,7 @@
 #fbt-tooltip, .linkSlides, #floating-bubble-text, #fbt-image {
   transition-property: all;
   transition-timing-function: ease-in-out;
-  transition-duration: 0.5s
+  transition-duration: 0.2s
 }
 
 #fbt-image img {
@@ -241,11 +245,10 @@
 
 #fbt-tooltip {
   position: relative;
-  background: #ddd;
-  border-radius: .4em;
+  background: <?= $bubble_color ?>;
+  /*border-radius: .4em;*/
   padding: 30px;
-  max-width: 100%;
-  /*width: 20%;*/
+  max-width: 90%;
   max-height: 100%;
   text-align: center;
 }
@@ -274,6 +277,13 @@
 
 }
 
+#fbt-tooltip.bubble {
+  padding: 20px;
+  max-width: 90%;
+  max-height: 100%;
+  text-align: center;
+}
+/*
 .right-tooltip:after {
   left: 0;
   top: 50%;
@@ -295,6 +305,121 @@
   border-right: 0;
   margin-top: -28px;
   margin-right: -28px;
+}
+*/
+
+
+.bubble {
+  display: inline-block;
+  position: relative;
+  padding: 30px 40px;
+  border-radius: 10px;
+  border: 3px solid black;
+  background: white;
+  font-family: "Permanent Marker";
+  clear: both;
+}
+
+.bubble:before {
+  content: '';
+  position: absolute;
+  bottom: -50px;
+  height: 50px;
+  width: 90px;
+}
+
+.bubble.left {
+  float: left;
+  /*margin: 10px 100px 60px 10px;*/
+}
+
+.bubble.left:before {
+  border-radius: 0 0 100%;
+  -webkit-box-shadow: -2px -2px 0 0 #000 inset, -23px 0 0 0 #fff inset, -25px -2px 0 0 #000 inset;
+          box-shadow: -2px -2px 0 0 #000 inset, -23px 0 0 0 #fff inset, -25px -2px 0 0 #000 inset;
+  left: 0;
+}
+
+.bubble.right {
+  float: right;
+  /*margin: 10px 10px 60px 100px;*/
+}
+
+.bubble.right:before {
+  border-radius: 0 0 0 100%;
+  -webkit-box-shadow: 2px -2px 0 0 #000 inset, 23px 0 0 0 #fff inset, 25px -2px 0 0 #000 inset;
+          box-shadow: 2px -2px 0 0 #000 inset, 23px 0 0 0 #fff inset, 25px -2px 0 0 #000 inset;
+  right: 0;
+}
+
+.bubble.think:before {
+  height: 3px;
+  width: 3px;
+  bottom: -20px;
+  border-radius: 100%;
+  background: #fff;
+}
+
+.bubble.think.left:before {
+  left: 50px;
+  -webkit-box-shadow: 0 0 0 7px white, 0 0 0 10px black, -20px 15px 0 5px white, -20px 15px 0 8px black, -40px 20px 0 2px white, -40px 20px 0 5px black;
+          box-shadow: 0 0 0 7px white, 0 0 0 10px black, -20px 15px 0 5px white, -20px 15px 0 8px black, -40px 20px 0 2px white, -40px 20px 0 5px black;
+}
+
+.bubble.think.right:before {
+  right: 50px;
+  -webkit-box-shadow: 0 0 0 7px white, 0 0 0 10px black, 20px 15px 0 5px white, 20px 15px 0 8px black, 40px 20px 0 2px white, 40px 20px 0 5px black;
+          box-shadow: 0 0 0 7px white, 0 0 0 10px black, 20px 15px 0 5px white, 20px 15px 0 8px black, 40px 20px 0 2px white, 40px 20px 0 5px black;
+}
+
+.bubble.yell:before {
+  height: 0px;
+  width: 0px;
+  bottom: -8px;
+  border-radius: 0;
+  background: #fff;
+}
+
+.bubble.yell:after {
+  content: '';
+  position: absolute;
+  bottom: -41px;
+  height: 20px;
+  width: 59px;
+}
+
+.bubble.yell.left:before {
+  -webkit-transform: skew(-45deg);
+          transform: skew(-45deg);
+  left: 50px;
+  -webkit-box-shadow: 0 -3px 0 5px white, 0 0 0 5px white, 0 8px 0 5px white, 8px 8px 0 5px white, 16px 8px 0 5px white, 24px 8px 0 5px white,   0 0 0 8px black, 0 8px 0 8px black, 8px 8px 0 8px black, 16px 8px 0 8px black, 24px 8px 0 8px black;
+          box-shadow: 0 -3px 0 5px white, 0 0 0 5px white, 0 8px 0 5px white, 8px 8px 0 5px white, 16px 8px 0 5px white, 24px 8px 0 5px white,   0 0 0 8px black, 0 8px 0 8px black, 8px 8px 0 8px black, 16px 8px 0 8px black, 24px 8px 0 8px black;
+}
+
+.bubble.yell.left:after {
+  border-radius: 0 0 60%;
+  -webkit-transform: skew(-45deg);
+          transform: skew(-45deg);
+  -webkit-box-shadow: -3px -2px 0 0 #000 inset, -14px 0 0 0 #fff inset, -17px -2px 0 0 #000 inset;
+          box-shadow: -3px -2px 0 0 #000 inset, -14px 0 0 0 #fff inset, -17px -2px 0 0 #000 inset;
+  left: 0;
+}
+
+.bubble.yell.right:before {
+  -webkit-transform: skew(45deg);
+          transform: skew(45deg);
+  right: 50px;
+  -webkit-box-shadow: 0 -3px 0 5px white, 0 0 0 5px white, 0 8px 0 5px white, -8px 8px 0 5px white, -16px 8px 0 5px white, -24px 8px 0 5px white,  0 0 0 8px black, 0 8px 0 8px black, -8px 8px 0 8px black, -16px 8px 0 8px black, -24px 8px 0 8px black;
+          box-shadow: 0 -3px 0 5px white, 0 0 0 5px white, 0 8px 0 5px white, -8px 8px 0 5px white, -16px 8px 0 5px white, -24px 8px 0 5px white,  0 0 0 8px black, 0 8px 0 8px black, -8px 8px 0 8px black, -16px 8px 0 8px black, -24px 8px 0 8px black;
+}
+
+.bubble.yell.right:after {
+  border-radius: 0 0 0 60%;
+  -webkit-transform: skew(45deg);
+          transform: skew(45deg);
+  -webkit-box-shadow: 3px -2px 0 0 #000 inset, 14px 0 0 0 #fff inset, 17px -2px 0 0 #000 inset;
+          box-shadow: 3px -2px 0 0 #000 inset, 14px 0 0 0 #fff inset, 17px -2px 0 0 #000 inset;
+  right: 0;
 }
 
 
