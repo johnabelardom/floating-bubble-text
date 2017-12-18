@@ -36,6 +36,10 @@
   }
 
   function showDivs(n) {
+
+    var tooltip = document.getElementById('fbt-tooltip');
+    if (tooltip == null)
+    	return;
     var i;
 
     var x = jQuery(".linkSlides");
@@ -60,8 +64,8 @@
 	  		}
 	  		cookies = cookie.split(';');
 	  		createCookie(cookies[0], cookies[1], cookies[2]);
-	  		jQuery('#floating_bubble_text').fadeOut();
-	  		jQuery('#floating_bubble_text').remove();
+	  		jQuery('#floating-bubble-text').fadeOut();
+	  		jQuery('#floating-bubble-text').remove();
 	  	});
 		data_pos = jQuery('#fbt-tooltip').attr('data-position-bubble');
 		if (data_pos != 'top')
@@ -82,64 +86,26 @@
 				followRightCenter();
 				setInterval(function() { checkForChanges(); followRightCenter(); }, 300);
 			}
-			if (data_pos == 'topLeft') {
-				followTopLeft();
-				setInterval(function() { checkForChanges(); followTopLeft(); }, 300);
-			}
-			if (data_pos == 'TopRight') {
-				followTopRight();
-				setInterval(function() { checkForChanges(); followTopRight(); }, 300);
-			}
 			jQuery(window).on('resize', function() {
 				if (data_pos == 'left')
 					followLeftCenter();
 				if (data_pos == 'right')
 					followRightCenter();
-				if (data_pos == 'top-left')
-					followTopLeft();
-				if (data_pos == 'Top-right')
-					followTopRight();
+
+				// (function(w){w = w || window; var i = w.setInterval(function(){},100000); while(i>=0) { w.clearInterval(i--); }})(/*window*/);
 			});
 		} else {
+			jQuery('[data-name=' + floating_bubble_text + ']').fadeOut();
 			jQuery('[data-name=' + floating_bubble_text + ']').remove();
 		}
 	})
 
-
-  function followTopLeft() {
-    var imgPos = jQuery('#fbt-image').position();
-    var tooltip = document.getElementById('fbt-tooltip');
-    var x = imgPos.left + 25;
-    var y = imgPos.top - 50;
-
-    if (last_y == 0)
-      last_y = y;
-    else
-      y = last_y;
-
-    tooltip.style.position = "absolute";
-    tooltip.style.left = x +'px';
-    tooltip.style.top = y +'px';
-  }
-  function followTopRight() {
-    var imgPos = jQuery('#fbt-image').position();
-    var tooltip = document.getElementById('fbt-tooltip');
-    var x = imgPos.left + (imgPos.left / 2);
-    var y = imgPos.top - 50;
-
-    if (last_y == 0)
-      last_y = y;
-    else
-      y = last_y;
-
-    tooltip.style.position = "absolute";
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
-  }
   function followRightCenter() {
+    var tooltip = document.getElementById('fbt-tooltip');
+    if (tooltip == null)
+    	return;
     var imgPos = jQuery('#fbt-image img').position();
     var img = jQuery('#fbt-image img');
-    var tooltip = document.getElementById('fbt-tooltip');
     var x = (imgPos.left + img.width()) - (newWidth * .1);
     var y = (imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2))) - (newHeight * .8);
 
@@ -147,15 +113,16 @@
     //   last_y = y;
     // else
     //   y = last_y;
-
     tooltip.style.position = "absolute";
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
   }
   function followLeftCenter() {
+    var tooltip = document.getElementById('fbt-tooltip');
+    if (tooltip == null)
+    	return;
     var imgPos = jQuery('#fbt-image img').position();
     var img = jQuery('#fbt-image img');
-    var tooltip = document.getElementById('fbt-tooltip');
     var x = imgPos.left - (newWidth);
     // console.log(imgPos.left);
     var y = (imgPos.top + ((img.height() / 2 + 1) - (newHeight / 2))) - (newHeight * .8);
@@ -165,7 +132,6 @@
     // } else {
     //   y = last_y;
     // }
-
     tooltip.style.position = "absolute";
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
@@ -226,6 +192,7 @@
 	        expires = "";
 	    }
 	    document.cookie = name+"="+value+expires+"; path=/";
+	    console.log('created exp');
 	}
 
 	function checkForExpiration(name) {
