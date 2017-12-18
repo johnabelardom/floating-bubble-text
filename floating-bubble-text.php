@@ -93,7 +93,8 @@ class Floating_Bubble_Text {
 	        'seconds' => '3000',
 	        'bubble_position' => 'top',
 	        'bubble_color' => '#ddd',
-	        'picture_align' => 'center'
+	        'picture_align' => 'center',
+	        'pos' => ''
 	    ), $atts, 'fbt' ) );
 	    // exit($bubble_position);
 	    // begin output buffering

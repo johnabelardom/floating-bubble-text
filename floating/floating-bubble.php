@@ -10,10 +10,7 @@
     $fbt_vars = $fbt_vars[0];
 
 ?>
-<div class="bubble right">
-  This is a blockquote that is styled to look like a speech bubble
-</div>
-<div id="floating-bubble-text" class="" style="max-width: 100%; position: fixed; bottom: 0; right: 0;">
+<div id="floating-bubble-text" class="<?= $pos == '' ? '' : $pos  ?>" style="">
   <div id="fbt-tooltip" data-position-bubble="<?= $bubble_position ?>" class="<?= $bubble_position != 'top' ? "bubble" : "" ?>">
     <div id="fbt-content" data-seconds="<?= $fbt_seconds ?>">
     <?php 
