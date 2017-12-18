@@ -17,8 +17,8 @@
   var last_y = 0;
   var data_pos;
   var element = jQuery("#fbt-tooltip");
-  var newWidth = element.css('width').replace('px', '');
-  var newHeight = element.css('height').replace('px', '');
+  var newWidth = element.length > 1 ? element.css('width').replace('px', '') : 0;
+  var newHeight = element.length > 1 ? element.css('height').replace('px', '') : 0;
   var floating_bubble_text;
 
   function checkForChanges() {

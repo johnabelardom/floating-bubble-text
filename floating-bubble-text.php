@@ -71,21 +71,23 @@ class Floating_Bubble_Text {
 
 	public function render_fbt_main_page(){
 		// echo "asduywhgaghsdyugwua";
-		include( plugin_dir_path( __FILE__ ) . 'pages/main-menu.php');
+		include( plugin_dir_path( __FILE__ ) . 'pages/main-menu.php' );
 	}
 
 
 	// Additional Pages functions
 	function fbt_create() {
-		include( plugin_dir_path( __FILE__ ) . 'pages/add-new-menu.php');
+		include( plugin_dir_path( __FILE__ ) . 'pages/add-new-menu.php' );
 	}
 
 	function fbt_update() {
-		include( plugin_dir_path( __FILE__ ) . 'pages/update-menu.php');
+		include( plugin_dir_path( __FILE__ ) . 'pages/update-menu.php' );
 	}
 	
 	// Function to add subscribe text to posts and pages
 	function floating_bubble_shortcode( $atts ) {
+
+		// add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_links_scripts' ) );
 	    extract( shortcode_atts( array(
 	        'fbt_id' => 'No ID provided',
 	        'name' => '',
