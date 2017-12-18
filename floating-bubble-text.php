@@ -2,7 +2,7 @@
    /*
    Plugin Name: Floating Bubble Text
    Description: Floating bubble text anywhere using shortcode
-   Version: 1.0.5
+   Version: 1.0.6
    License: GPL2
    */
 
@@ -25,12 +25,10 @@ class Floating_Bubble_Text {
 		register_activation_hook( __FILE__, array( $this, 'activation_hook' ) );
 		add_action('admin_menu', array($this, 'add_plugin_menu'));	
 		add_shortcode('fbt', array($this, 'floating_bubble_shortcode'));
+		add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_links_scripts' ) );
 	}
 
 	function activation_hook() {
-		wp_enqueue_style( 'floating-bubble-text-styling', plugins_url( '/assets/style.css', __FILE__  ) );
-		wp_enqueue_script( 'floating-bubble-text-script', plugins_url('/assets/floating-bubble-text-script.js', __FILE__ ), array(), '1.0.0', true );
-
 	    global $wpdb;
 	    $table_name = $wpdb->prefix . "floating_bubble_text";
 	    $charset_collate = $wpdb->get_charset_collate();
@@ -43,6 +41,11 @@ class Floating_Bubble_Text {
 
 	    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	    dbDelta($sql);
+	}
+
+	function wp_enqueue_links_scripts() {
+		wp_enqueue_style( 'floating-bubble-text-styling', plugins_url( '/assets/style.css', __FILE__  ) );
+		wp_enqueue_script( 'floating-bubble-text-script', plugins_url('/assets/floating-bubble-text-script.js', __FILE__ ), array(), '1.0.0', true );
 	}
 
 	public function add_plugin_menu() {
