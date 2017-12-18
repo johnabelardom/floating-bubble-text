@@ -19,6 +19,7 @@
   var element = jQuery("#fbt-tooltip");
   var newWidth = element.css('width').replace('px', '');
   var newHeight = element.css('height').replace('px', '');
+  var floating_bubble_text;
 
   function checkForChanges() {
       w = element.css('width').replace('px', '');
@@ -26,8 +27,8 @@
       h = element.css('height').replace('px', '');
       newHeight = h;
 
-      console.log("New Width", newWidth);
-      console.log("New Height", newHeight);
+      // console.log("New Width", newWidth);
+      // console.log("New Height", newHeight);
   }
 
   function plusDivs(n) {
@@ -48,49 +49,62 @@
     x[slideIndex-1].style.display = "block";   
   }
 
-  jQuery(document).ready(function() {
-    // setTimeout(function() {
-      data_pos = jQuery('#fbt-tooltip').attr('data-position-bubble');
-      console.log(data_pos);
-      if (data_pos != 'top')
-      	jQuery('#fbt-tooltip').addClass(data_pos == 'right' ? 'left' : 'right');
-      else
-      	jQuery('#fbt-tooltip').addClass(data_pos);
+	jQuery(document).ready(function() {
+  		floating_bubble_text = jQuery('#floating-bubble-text').attr('data-name');
+  		console.log(floating_bubble_text);
+	  	jQuery('.close_btn').click(function() {
+	  		var cookie = jQuery(this).attr('data-cookie');
+	  		if (! cookie) {
+	  			console.log(cookie);
+	  			return;
+	  		}
+	  		cookies = cookie.split(';');
+	  		createCookie(cookies[0], cookies[1], cookies[2]);
+	  		jQuery('#floating_bubble_text').fadeOut();
+	  		jQuery('#floating_bubble_text').remove();
+	  	});
+		data_pos = jQuery('#fbt-tooltip').attr('data-position-bubble');
+		if (data_pos != 'top')
+			jQuery('#fbt-tooltip').addClass(data_pos == 'right' ? 'left' : 'right');
+		else
+			jQuery('#fbt-tooltip').addClass(data_pos);
 
-      jQuery('[data-link-slide=1]').attr('style', '');
-      secs = jQuery('#fbt-content').attr('data-seconds');
-      // setInterval(showDivs(1), 1);
-      setInterval(function() { plusDivs(1) }, secs);
-      // setInterval(function() { checkForChanges(); followLeftCenter(); }, secs / 2);
-      if (data_pos == 'left') {
-        followLeftCenter();
-        setInterval(function() { checkForChanges(); followLeftCenter(); }, secs / 2);
-      }
-      if (data_pos == 'right') {
-        followRightCenter();
-        setInterval(function() { checkForChanges(); followRightCenter(); }, secs / 2);
-      }
-      if (data_pos == 'topLeft') {
-        followTopLeft();
-        setInterval(function() { checkForChanges(); followTopLeft(); }, secs / 2);
-      }
-      if (data_pos == 'TopRight') {
-        followTopRight();
-        setInterval(function() { checkForChanges(); followTopRight(); }, secs / 2);
-      }
-    // }, 3000)
-  })
+		jQuery('[data-link-slide=1]').attr('style', '');
+		secs = jQuery('#fbt-content').attr('data-seconds');
 
-  jQuery(window).on('resize', function() {
-    if (data_pos == 'left')
-      followLeftCenter();
-    if (data_pos == 'right')
-      followRightCenter();
-    if (data_pos == 'top-left')
-      followTopLeft();
-    if (data_pos == 'Top-right')
-      followTopRight();
-  });
+		if (! checkForExpiration(floating_bubble_text)) {
+			setInterval(function() { plusDivs(1) }, secs);
+			if (data_pos == 'left') {
+				followLeftCenter();
+				setInterval(function() { checkForChanges(); followLeftCenter(); }, 300);
+			}
+			if (data_pos == 'right') {
+				followRightCenter();
+				setInterval(function() { checkForChanges(); followRightCenter(); }, 300);
+			}
+			if (data_pos == 'topLeft') {
+				followTopLeft();
+				setInterval(function() { checkForChanges(); followTopLeft(); }, 300);
+			}
+			if (data_pos == 'TopRight') {
+				followTopRight();
+				setInterval(function() { checkForChanges(); followTopRight(); }, 300);
+			}
+			jQuery(window).on('resize', function() {
+				if (data_pos == 'left')
+					followLeftCenter();
+				if (data_pos == 'right')
+					followRightCenter();
+				if (data_pos == 'top-left')
+					followTopLeft();
+				if (data_pos == 'Top-right')
+					followTopRight();
+			});
+		} else {
+			jQuery('[data-name=' + floating_bubble_text + ']').remove();
+		}
+	})
+
 
   function followTopLeft() {
     var imgPos = jQuery('#fbt-image').position();
@@ -156,3 +170,70 @@
     tooltip.style.left = x + 'px';
     tooltip.style.top = y + 'px';
   }
+	/*var check_ ;
+  function cookie() {
+  	console.log(localStorage);
+  	var cookie = jQuery('#floating-bubble-text').attr('data-cookie');
+
+  	if (cookie == '')
+  		return;
+
+  	cookies = cookie.split(';');
+  	var cookie_name = cookies[0];
+  	var expire = cookies[1] * 1;
+
+  	var d = new Date();
+    var expires = d.getTime() + (expire);;
+	console.log(expires);
+
+	if (! localStorage.getItem(cookie_name))
+		localStorage.setItem(cookie_name, expires);
+
+	check_ = setInterval(check(cookie_name), 1000);
+
+	setInterval(function() {
+		console.log(localStorage);
+	}, 1000);
+
+	function check(name) {
+  		var expire = localStorage.getItem(name);
+  		var cur = (new Date()).getTime();
+  		console.log(expire - cur);
+  		console.log((new Date(expire * 1)).toString());
+  		console.log((new Date(cur)).toString());
+
+	  	if (! localStorage.getItem(name)) {
+	  		jQuery('#floating-bubble-text').fadeIn();
+	  	} else {
+	  		if (! cur >= expire) {
+		  		jQuery('#floating-bubble-text').fadeOut();
+		  	} else {
+		  		localStorage.setItem(name, '');
+		  		jQuery('#floating-bubble-text').fadeOut();
+		  		clearInterval(check_)
+		  	}
+	  	}
+	}
+  }*/
+
+	function createCookie(name, value, days) {
+	    var date, expires;
+	    if (days) {
+	        date = new Date();
+	        date.setTime(date.getTime()+(days*24*60*60*1000));
+	        expires = "; expires="+date.toGMTString();
+	    } else {
+	        expires = "";
+	    }
+	    document.cookie = name+"="+value+expires+"; path=/";
+	}
+
+	function checkForExpiration(name) {
+		var value = "; " + document.cookie;
+		var parts = value.split("; " + name + "=");
+		if (parts.length == 2) {
+			console.log(parts.pop().split(";").shift());
+			return true;
+		} else
+			return false
+	}

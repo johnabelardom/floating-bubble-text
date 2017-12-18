@@ -10,7 +10,7 @@
     $fbt_vars = $fbt_vars[0];
 
 ?>
-<div id="floating-bubble-text" class="<?= $pos == '' ? '' : $pos  ?>" style="">
+<div id="floating-bubble-text" <?= $name != '' ? "data-name='$name'" : '' ?> class="<?= $pos == '' ? '' : $pos  ?>" style="">
   <div id="fbt-tooltip" data-position-bubble="<?= $bubble_position ?>" class="<?= $bubble_position != 'top' ? "bubble" : "" ?>">
     <div id="fbt-content" data-seconds="<?= $fbt_seconds ?>">
     <?php 
@@ -29,8 +29,15 @@
   <div id="fbt-image" style="text-align: <?= $picture_align ?>;">
     <img src="<?= $fbt_vars->picture_link ?>" >
   </div>
-</div>
 
+  <?php 
+    if ($close_btn) {
+  ?>
+    <div class="close_btn" <?= $cookie != '' ? "data-cookie=\"$cookie\"" : '' ?>>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  <?php } ?>
+  </div>
 <script>
 
 </script>

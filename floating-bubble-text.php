@@ -2,7 +2,7 @@
    /*
    Plugin Name: Floating Bubble Text
    Description: Floating bubble text anywhere using shortcode
-   Version: 1.0.6
+   Version: 1.0.7
    License: GPL2
    */
 
@@ -45,6 +45,7 @@ class Floating_Bubble_Text {
 
 	function wp_enqueue_links_scripts() {
 		wp_enqueue_style( 'floating-bubble-text-styling', plugins_url( '/assets/style.css', __FILE__  ) );
+		wp_enqueue_style( 'font-awesome', plugins_url( '/assets/font-awesome/css/font-awesome.min.css', __FILE__  ) );
 		wp_enqueue_script( 'floating-bubble-text-script', plugins_url('/assets/floating-bubble-text-script.js', __FILE__ ), array(), '1.0.0', true );
 	}
 
@@ -87,25 +88,36 @@ class Floating_Bubble_Text {
 	function floating_bubble_shortcode( $atts ) {
 	    extract( shortcode_atts( array(
 	        'fbt_id' => 'No ID provided',
+	        'name' => '',
 	        'limit' => '3',
 	        'category' => '',
 	        'post_type' => 'post',
-	        'seconds' => '3000',
+	        'seconds' => '5000',
 	        'bubble_position' => 'top',
 	        'bubble_color' => '#ddd',
 	        'picture_align' => 'center',
-	        'pos' => ''
+	        'pos' => '',
+	        'close_btn' => false,
+	        'expiration_days' => 20,
 	    ), $atts, 'fbt' ) );
 	    // exit($bubble_position);
-	    // begin output buffering
-	    ob_start();
+
+	    if ( $name == '' ) {
+	    	ob_start();
+	    	echo "Please insert name attribute for this floating bubble";
+    		return ob_get_clean();
+	    }
 
 	    $fbt_vars = $fbt_id != '' ? $this->get_record_by_id( $fbt_id ) : null;
 	    $fbt_content = $this->get_latest_posts( $limit, $category, $post_type );
 
+	    if ( $close_btn && $expiration_days ) {
+	    	$cookie = $name . ';' . 'hide' . ';' . $expiration_days;
+	    }
 
+	    // begin output buffering
+	    ob_start();
 		include( plugin_dir_path( __FILE__ ) . 'floating/floating-bubble.php');
-
 		// end output buffering, grab the buffer contents, and empty the buffer
     	return ob_get_clean();
 	}
@@ -113,7 +125,7 @@ class Floating_Bubble_Text {
 	function get_record_by_id( $id ) {
 	    global $wpdb;
 	    $table_name = $wpdb->prefix . "floating_bubble_text";
-	    $rows = $wpdb->get_results("SELECT id, name, picture_link FROM $table_name WHERE id = $id");
+	    $rows = $wpdb->get_results("SELECT id, name, picture_link FROM $table_name WHERE id = $id LIMIT 1");
 	    return $rows;
 	}
 
