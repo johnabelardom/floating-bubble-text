@@ -11,6 +11,7 @@
 
 ?>
 <div id="floating-bubble-text" <?= $name != '' ? "data-name='$name'" : '' ?> class="<?= $pos == '' ? '' : $pos  ?>" style="">
+  <?php if ( $no_bubble == false ) { ?>
   <div id="fbt-tooltip" data-position-bubble="<?= $bubble_position ?>" class="<?= $bubble_position != 'top' ? "bubble" : "" ?>">
     <div id="fbt-content" data-seconds="<?= $fbt_seconds ?>">
     <?php 
@@ -25,6 +26,7 @@
     ?>
     </div>
   </div>
+  <?php } ?>
 
   <div id="fbt-image" style="text-align: <?= $picture_align ?>;">
     <img src="<?= $fbt_vars->picture_link ?>" >

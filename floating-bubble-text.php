@@ -95,6 +95,7 @@ class Floating_Bubble_Text {
 	        'category' => '',
 	        'post_type' => 'post',
 	        'seconds' => '5000',
+	        'no_bubble' => false,
 	        'bubble_position' => 'top',
 	        'bubble_color' => '#ddd',
 	        'picture_align' => 'center',
@@ -119,7 +120,7 @@ class Floating_Bubble_Text {
 
 	    // begin output buffering
 	    ob_start();
-		include( plugin_dir_path( __FILE__ ) . 'floating/floating-bubble.php');
+		include( plugin_dir_path( __FILE__ ) . 'floating/floating-bubble.php' );
 		// end output buffering, grab the buffer contents, and empty the buffer
     	return ob_get_clean();
 	}
@@ -131,7 +132,7 @@ class Floating_Bubble_Text {
 	    return $rows;
 	}
 
-	function get_latest_posts( $limit = 5, $category = '', $post_type = "post") {
+	function get_latest_posts( $limit = 5, $category = '', $post_type = "post" ) {
 	    global $wpdb;
 
 	    if ( $post_type != 'post' && ! post_type_exists( $post_type ) ) {
